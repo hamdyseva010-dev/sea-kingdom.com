@@ -24,55 +24,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap" rel="stylesheet" />
     <link rel="preload" as="image" href="https://egyptexpresstvl.com/wp-content/uploads/2025/06/girl-beach.png" />
     <link rel="stylesheet" href="https://esm.sh/yet-another-react-lightbox@3.21.0/styles.css" />
-    <script>
-      window.tailwind = window.tailwind || {};
-      window.tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              onyx: '#121212',
-              'onyx-soft': '#1a1a1a',
-              graphite: '#202020',
-              gold: '#d4af37',
-              'gold-soft': '#c9a961',
-              'gold-dark': '#a8842b',
-              navy: '#0c4a6e',
-              cloud: '#f0f9ff',
-              brand: '#0891b2',
-              'brand-dark': '#0e7490',
-              'brand-light': '#22d3ee',
-            },
-            fontFamily: {
-              display: ['"Playfair Display"', '"Cormorant Garamond"', 'Georgia', 'serif'],
-              serif: ['"Cormorant Garamond"', '"Playfair Display"', 'Georgia', 'serif'],
-              sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-            },
-          },
-        },
-      };
-    </script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-      :root { color-scheme: dark; }
-      html { scroll-behavior: smooth; }
-      body { margin: 0; min-height: 100vh; font-family: Inter, system-ui, -apple-system, sans-serif; color: #f4f4f4; background-color: #121212; -webkit-font-smoothing: antialiased; }
-      * { box-sizing: border-box; }
-      ::selection { background: rgba(212, 175, 55, 0.3); }
-      ::-webkit-scrollbar { width: 5px; }
-      ::-webkit-scrollbar-track { background: #f0f9ff; }
-      ::-webkit-scrollbar-thumb { background: #0891b2; border-radius: 999px; }
-      .yarl__container { background: rgba(12, 74, 110, 0.96) !important; }
-    </style>
   </head>
   <body>
     <div id="root"></div>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script type="module">
-      const source = document.getElementById('app-code').textContent;
-      const result = Babel.transform(source, { presets: ['react'], sourceType: 'module' });
-      const moduleUrl = URL.createObjectURL(new Blob([result.code], { type: 'text/javascript' }));
-      import(moduleUrl);
-    </script>
+    <script type="module" src="/src/main.tsx"></script>
     <script type="text/plain" id="app-code">
       import React, { StrictMode, useState, useEffect, useRef } from 'https://esm.sh/react@19?dev';
       import { createRoot } from 'https://esm.sh/react-dom@19/client?dev';
