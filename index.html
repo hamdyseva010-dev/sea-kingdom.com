@@ -25,7 +25,8 @@
     <link rel="preload" as="image" href="https://egyptexpresstvl.com/wp-content/uploads/2025/06/girl-beach.png" />
     <link rel="stylesheet" href="https://esm.sh/yet-another-react-lightbox@3.21.0/styles.css" />
     <script>
-      tailwind.config = {
+      window.tailwind = window.tailwind || {};
+      window.tailwind.config = {
         theme: {
           extend: {
             colors: {
@@ -65,12 +66,19 @@
   </head>
   <body>
     <div id="root"></div>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script type="module">
+      const source = document.getElementById('app-code').textContent;
+      const result = Babel.transform(source, { presets: ['react'], sourceType: 'module' });
+      const moduleUrl = URL.createObjectURL(new Blob([result.code], { type: 'text/javascript' }));
+      import(moduleUrl);
+    </script>
+    <script type="text/plain" id="app-code">
       import React, { StrictMode, useState, useEffect, useRef } from 'https://esm.sh/react@19?dev';
       import { createRoot } from 'https://esm.sh/react-dom@19/client?dev';
       import { BrowserRouter, Routes, Route } from 'https://esm.sh/react-router-dom@7?dev';
       import { motion, AnimatePresence, useScroll, useTransform, useSpring, useInView } from 'https://esm.sh/framer-motion@11?dev';
-      import { Anchor, Menu, X, ChevronDown, ArrowRight, Users, MessageCircle, Ruler, Check, ChevronLeft, Share2, Heart, Expand, Star, Quote, MapPin, Phone, Mail, Instagram, Facebook, Award, Shield, Plus } from 'https://esm.sh/lucide-react@0.468.0?dev';
+      import { Anchor, Menu, X, ChevronDown, ArrowRight, ChevronRight, Users, MessageCircle, Ruler, Check, ChevronLeft, Share2, Heart, Expand, Star, Quote, MapPin, Phone, Mail, Instagram, Facebook, Award, Shield, Plus, Clock, Car } from 'https://esm.sh/lucide-react@0.468.0?dev';
       import Lightbox from 'https://esm.sh/yet-another-react-lightbox@3.21.0?dev';
 
       const GOLD = '#D4AF37';
@@ -221,19 +229,50 @@
           { label: 'No Advance Payment', sub: 'Pay on Arrival' },
         ];
         const [activeBoat, setActiveBoat] = useState(null);
-        function BoatGalleryModal({ boat, onClose }) {
+                function BoatGalleryModal({ boat, onClose }) {
           const [active, setActive] = useState(0);
-          const [wishlisted, setWishlisted] = useState(false);
           useEffect(() => {
-            const onKey = (e) => { if (e.key === 'Escape') onClose(); if (e.key === 'ArrowRight') setActive((i) => (i + 1) % boat.images.length); if (e.key === 'ArrowLeft') setActive((i) => (i - 1 + boat.images.length) % boat.images.length); };
+            if (!boat) return undefined;
+            const onKey = (e) => {
+              if (e.key === 'Escape') onClose();
+              if (e.key === 'ArrowRight') setActive((i) => (i + 1) % boat.images.length);
+              if (e.key === 'ArrowLeft') setActive((i) => (i - 1 + boat.images.length) % boat.images.length);
+            };
             window.addEventListener('keydown', onKey);
             document.body.style.overflow = 'hidden';
-            return () => { window.removeEventListener('keydown', onKey); document.body.style.overflow = ''; };
-          }, [boat.images.length, onClose]);
+            return () => {
+              window.removeEventListener('keydown', onKey);
+              document.body.style.overflow = '';
+            };
+          }, [boat, onClose]);
+          if (!boat) return null;
           const next = () => setActive((i) => (i + 1) % boat.images.length);
           const prev = () => setActive((i) => (i - 1 + boat.images.length) % boat.images.length);
-          const handleShare = async () => { const shareData = { title: `sea-kingdom · ${boat.name}`, text: `Check out the ${boat.name} private speed boat`, url: window.location.href }; if (navigator.share) { try { await navigator.share(shareData); } catch {} } else { try { await navigator.clipboard.writeText(window.location.href); } catch {} } };
-          return (<motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.25 }} className="fixed inset-0 z-[100] flex items-center justify-center px-4 sm:px-8 py-10" style={{ background: 'rgba(10,10,10,0.85)', backdropFilter: 'blur(8px)' }} onClick={onClose}><motion.div initial={{ scale: 0.96, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.96, opacity: 0 }} transition={{ duration: 0.3, ease: 'easeOut' }} className="relative w-full max-w-6xl bg-[#FBFAF7]" style={{ borderRadius: '8px' }} onClick={(e) => e.stopPropagation()}><div className="flex items-center justify-between px-6 sm:px-8 py-5 border-b border-stone-200"><div><p className="text-[0.6rem] uppercase text-stone-500 mb-1" style={{ letterSpacing: '0.32em' }}>Chose</p><h3 className="font-display text-stone-900" style={{ fontSize: '1.5rem', fontWeight: 400, letterSpacing: '-0.005em' }}>{boat.name}</h3></div><button type="button" onClick={onClose} className="p-2 text-stone-600 hover:text-stone-900 hover:bg-stone-100 transition-colors" style={{ borderRadius: '999px' }} aria-label="Close gallery"><X size={20} strokeWidth={1.75} /></button></div><div className="p-4 sm:p-6"><div className="grid md:grid-cols-[1fr_2.5fr] gap-3" style={{ maxHeight: '550px' }}><div className="hidden md:flex flex-col gap-3" style={{ maxHeight: '550px' }}>{boat.images.slice(0, 4).map((src, i) => { const isLast = i === 3 && boat.images.length > 4; const isActive = i === active; return (<button key={src} type="button" onClick={() => setActive(i)} className="relative flex-1 overflow-hidden group focus:outline-none" style={{ borderRadius: '6px', minHeight: 0 }} aria-label={`Show image ${i + 1}`}><img src={src} alt={`${boat.name} ${i + 1}`} loading="lazy" className="absolute inset-0 w-full h-full object-cover transition-all duration-500" style={{ opacity: isActive ? 1 : 0.6 }} />{isActive && !isLast && <div className="absolute inset-0 pointer-events-none" style={{ border: `1.5px solid ${GOLD}`, borderRadius: '6px' }} />} {isLast && <div className="absolute inset-0 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(2px)', WebkitBackdropFilter: 'blur(2px)' }}><span className="text-white text-[0.65rem] uppercase px-5 py-2.5" style={{ letterSpacing: '0.28em', fontWeight: 400, border: '1px solid rgba(255,255,255,0.6)', borderRadius: '999px' }}>+ {boat.images.length - 4} See More</span></div>}</button>); })}</div><div className="relative overflow-hidden bg-stone-100" style={{ borderRadius: '6px', aspectRatio: '4 / 3', maxHeight: '550px' }}><img key={boat.images[active]} src={boat.images[active]} alt={`${boat.name} preview`} className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500" /><div className="absolute top-4 right-4 flex items-center gap-2 z-10"><button type="button" onClick={handleShare} className="flex items-center gap-1.5 bg-white/90 hover:bg-white text-stone-800 text-[0.7rem] uppercase px-4 py-2 transition-all duration-300 shadow-sm hover:shadow-md" style={{ letterSpacing: '0.18em', borderRadius: '25px', fontWeight: 500, backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)' }} aria-label="Share"><Share2 size={13} strokeWidth={1.75} /><span className="hidden sm:inline">Share</span></button><button type="button" onClick={() => setWishlisted((w) => !w)} className="flex items-center gap-1.5 bg-white/90 hover:bg-white text-stone-800 text-[0.7rem] uppercase px-4 py-2 transition-all duration-300 shadow-sm hover:shadow-md" style={{ letterSpacing: '0.18em', borderRadius: '25px', fontWeight: 500, backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)' }} aria-label={wishlisted ? 'Remove from wishlist' : 'Add to wishlist'} aria-pressed={wishlisted}><Heart size={13} strokeWidth={1.75} fill={wishlisted ? GOLD : 'transparent'} color={wishlisted ? GOLD : 'currentColor'} /><span className="hidden sm:inline">{wishlisted ? 'Saved' : 'Wishlist'}</span></button></div>{boat.images.length > 1 && (<><button type="button" onClick={prev} className="md:hidden absolute left-3 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white text-stone-800 p-2 transition-all duration-300 shadow-sm" style={{ borderRadius: '999px' }} aria-label="Previous image"><ChevronLeft size={20} strokeWidth={1.75} /></button><button type="button" onClick={next} className="md:hidden absolute right-3 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white text-stone-800 p-2 transition-all duration-300 shadow-sm" style={{ borderRadius: '999px' }} aria-label="Next image"><ChevronRight size={20} strokeWidth={1.75} /></button><div className="md:hidden absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">{boat.images.map((_, i) => (<button key={i} type="button" onClick={() => setActive(i)} className="h-1 transition-all duration-300" style={{ width: i === active ? '20px' : '6px', background: i === active ? GOLD : 'rgba(255,255,255,0.75)', borderRadius: '999px' }} aria-label={`Go to slide ${i + 1}`} />))}</div></>)}<div className="absolute bottom-5 left-0 right-0 px-8 pb-7 pointer-events-none"><div className="flex items-end justify-between mb-4"><div><p className="uppercase text-white/55 mb-1.5" style={{ fontSize: '0.55rem', letterSpacing: '0.32em', fontWeight: 400 }}>Private Yacht</p><p className="font-display text-white capitalize" style={{ fontSize: '1.5rem', fontWeight: 400, letterSpacing: '-0.005em', lineHeight: 1 }}>{boat.name}</p></div><span className="flex items-center gap-2 uppercase text-white/70 transition-colors" style={{ fontSize: '0.55rem', letterSpacing: '0.32em', fontWeight: 400 }}><Expand size={11} strokeWidth={1.5} />View Gallery</span></div>{boat.images.length > 1 && (<div className="flex gap-1.5">{boat.images.map((_, i) => (<span key={i} className="flex-1 h-px relative overflow-hidden" style={{ background: 'rgba(255,255,255,0.2)' }}><span className="absolute inset-0 origin-left transition-transform" style={{ background: GOLD, transform: i < active ? 'scaleX(1)' : i === active ? 'scaleX(1)' : 'scaleX(0)', transitionDuration: i === active ? '4000ms' : '500ms', transitionTimingFunction: 'linear' }} /></span>))}</div>)}</div></div></div></motion.div></motion.div>); }
+          return (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.25 }} className="fixed inset-0 z-[100] flex items-center justify-center px-4 sm:px-8 py-10" style={{ background: 'rgba(10,10,10,0.85)', backdropFilter: 'blur(8px)' }} onClick={onClose}>
+              <motion.div initial={{ scale: 0.96, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.96, opacity: 0 }} transition={{ duration: 0.3, ease: 'easeOut' }} className="relative w-full max-w-6xl bg-[#FBFAF7]" style={{ borderRadius: '8px' }} onClick={(e) => e.stopPropagation()}>
+                <div className="flex items-center justify-between px-6 sm:px-8 py-5 border-b border-stone-200">
+                  <div>
+                    <p className="text-[0.6rem] uppercase text-stone-500 mb-1" style={{ letterSpacing: '0.32em' }}>Choose</p>
+                    <h3 className="font-display text-stone-900" style={{ fontSize: '1.5rem', fontWeight: 400, letterSpacing: '-0.005em' }}>{boat.name}</h3>
+                  </div>
+                  <button type="button" onClick={onClose} className="p-2 text-stone-600 hover:text-stone-900 hover:bg-stone-100 transition-colors" style={{ borderRadius: '999px' }} aria-label="Close gallery"><X size={20} strokeWidth={1.75} /></button>
+                </div>
+                <div className="p-4 sm:p-6">
+                  <div className="relative overflow-hidden rounded-xl aspect-[16/10] bg-black">
+                    <img src={boat.images[active]} alt={`${boat.name} image ${active + 1}`} className="absolute inset-0 w-full h-full object-cover" />
+                    {boat.images.length > 1 && (
+                      <>
+                        <button type="button" onClick={(e) => { e.stopPropagation(); prev(); }} className="absolute left-3 top-1/2 -translate-y-1/2 p-2 rounded bg-white/80 text-stone-800"><ChevronLeft size={20} strokeWidth={1.75} /></button>
+                        <button type="button" onClick={(e) => { e.stopPropagation(); next(); }} className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded bg-white/80 text-stone-800"><ChevronRight size={20} strokeWidth={1.75} /></button>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </motion.div>
+            </motion.div>
+          );
+        }
         function BoatCardImage({ images, name, onOpen }) {
           const [active, setActive] = useState(0);
           const [hovered, setHovered] = useState(false);
@@ -255,22 +294,35 @@
       }
 
       function Gallery() {
-        const photos = [
-          { url: '/images/lunch-1.jpeg', alt: 'Luxury boat experience with fresh seafood buffet' },
-          { url: '/images/lunch-2.jpeg', alt: 'Delicious grilled fish and appetizers spread' },
-          { url: '/images/lunch-3.jpeg', alt: 'Fresh fruit platter and gourmet dining experience' },
-          { url: '/images/boat-experience-5.jpg', alt: 'Premium onboard meal service with fresh ingredients' },
-        ];
-        const [activeIndex, setActiveIndex] = useState(0);
-        const [wishlisted, setWishlisted] = useState(false);
-        const [lightboxOpen, setLightboxOpen] = useState(false);
-        const [paused, setPaused] = useState(false);
-        useEffect(() => { if (photos.length <= 1 || paused || lightboxOpen) return; const id = window.setInterval(() => setActiveIndex((p) => (p + 1) % photos.length), 4500); return () => window.clearInterval(id); }, [paused, lightboxOpen]);
-        const handleShare = async () => { const shareData = { title: 'sea-kingdom', text: photos[activeIndex].alt, url: window.location.href }; if (navigator.share) { try { await navigator.share(shareData); } catch {} } else { try { await navigator.clipboard.writeText(window.location.href); } catch {} } };
-        return (<section id="gallery" className="py-16 px-6 bg-onyx"><div className="max-w-7xl mx-auto"><motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="mb-12"><div className="flex items-baseline gap-5 mb-5"><span className="font-display" style={{ fontSize: '0.875rem', color: GOLD, fontWeight: 400, letterSpacing: '0.05em' }}>— 03</span><p className="uppercase text-white/45" style={{ fontSize: '0.65rem', letterSpacing: '0.32em', fontWeight: 400 }}>Onboard Experience</p></div><AnimatedHeadline className="font-display text-white" style={{ fontSize: 'clamp(2.4rem, 6vw, 4rem)', fontWeight: 400, lineHeight: 1.02, letterSpacing: '-0.02em' }} segments={[{ text: 'Lunch' }, { text: 'Included.', italic: true, color: GOLD }]} /></motion.div><motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="grid md:grid-cols-[1fr_2.5fr] gap-3" style={{ maxHeight: '550px' }}><div className="hidden md:flex flex-col gap-3" style={{ maxHeight: '550px' }}>{photos.slice(0, 4).map((photo, i) => { const isLast = i === 3 && photos.length > 4; const isActive = i === activeIndex; return (<button key={photo.url} type="button" onClick={() => (isLast ? setLightboxOpen(true) : setActiveIndex(i))} className="relative flex-1 overflow-hidden group focus:outline-none" style={{ borderRadius: '6px', minHeight: 0 }} aria-label={isLast ? 'View all photos' : `Show ${photo.alt}`}><img src={photo.url} alt={photo.alt} loading="lazy" className="absolute inset-0 w-full h-full object-cover transition-all duration-500" style={{ opacity: isActive ? 1 : 0.6 }} /><div className="absolute inset-0 transition-opacity duration-500 group-hover:opacity-0" style={{ background: isActive ? 'transparent' : 'rgba(20,20,20,0.15)' }} />{isActive && !isLast && <div className="absolute inset-0 pointer-events-none" style={{ border: `1.5px solid ${GOLD}`, borderRadius: '6px' }} />} {isLast && <div className="absolute inset-0 flex items-center justify-center transition-all duration-300 group-hover:bg-black/50" style={{ background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(2px)', WebkitBackdropFilter: 'blur(2px)' }}><span className="text-white text-[0.65rem] uppercase px-5 py-2.5" style={{ letterSpacing: '0.28em', fontWeight: 400, border: '1px solid rgba(255,255,255,0.6)', borderRadius: '999px' }}>+ {photos.length - 4} View All</span></div>}</button>); })}</div><div className="relative overflow-hidden group/main" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)} style={{ borderRadius: '6px', maxHeight: '550px', aspectRatio: '4 / 3', background: '#1a1a1a' }}><img src={photos[activeIndex].url} alt={photos[activeIndex].alt} className="absolute inset-0 w-full h-full object-cover transition-all duration-[1400ms] ease-out group-hover/main:scale-[1.04]" key={photos[activeIndex].url} /><div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.15) 35%, rgba(0,0,0,0) 60%)' }} /><span aria-hidden="true" className="absolute top-5 left-5 w-6 h-6 pointer-events-none" style={{ borderTop: `1px solid ${GOLD}`, borderLeft: `1px solid ${GOLD}` }} /><span aria-hidden="true" className="absolute top-5 right-5 w-6 h-6 pointer-events-none" style={{ borderTop: `1px solid ${GOLD}`, borderRight: `1px solid ${GOLD}` }} /><span aria-hidden="true" className="absolute bottom-5 left-5 w-6 h-6 pointer-events-none opacity-60" style={{ borderBottom: `1px solid ${GOLD}`, borderLeft: `1px solid ${GOLD}` }} /><span aria-hidden="true" className="absolute bottom-5 right-5 w-6 h-6 pointer-events-none opacity-60" style={{ borderBottom: `1px solid ${GOLD}`, borderRight: `1px solid ${GOLD}` }} /><div className="absolute top-4 right-4 flex items-center gap-2 z-10"><button type="button" onClick={handleShare} className="flex items-center gap-1.5 bg-white/90 hover:bg-white text-stone-800 text-[0.7rem] uppercase px-4 py-2 transition-all duration-300 shadow-sm hover:shadow-md" style={{ letterSpacing: '0.18em', borderRadius: '25px', fontWeight: 500, backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)' }} aria-label="Share"><Share2 size={13} strokeWidth={1.75} /><span className="hidden sm:inline">Share</span></button><button type="button" onClick={() => setWishlisted((w) => !w)} className="flex items-center gap-1.5 bg-white/90 hover:bg-white text-stone-800 text-[0.7rem] uppercase px-4 py-2 transition-all duration-300 shadow-sm hover:shadow-md" style={{ letterSpacing: '0.18em', borderRadius: '25px', fontWeight: 500, backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)' }} aria-label={wishlisted ? 'Remove from wishlist' : 'Add to wishlist'} aria-pressed={wishlisted}><Heart size={13} strokeWidth={1.75} fill={wishlisted ? GOLD : 'transparent'} color={wishlisted ? GOLD : 'currentColor'} /><span className="hidden sm:inline">{wishlisted ? 'Saved' : 'Wishlist'}</span></button></div><button type="button" onClick={() => setLightboxOpen(true)} className="md:hidden absolute bottom-4 right-4 z-10 text-white text-[0.6rem] uppercase px-4 py-2" style={{ letterSpacing: '0.24em', background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)', border: '1px solid rgba(255,255,255,0.5)', borderRadius: '999px' }}>View All</button><button type="button" onClick={() => setActiveIndex((activeIndex - 1 + photos.length) % photos.length)} className="md:hidden absolute left-3 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white text-stone-800 p-2 transition-all duration-300 shadow-sm" style={{ borderRadius: '999px' }} aria-label="Previous image"><ChevronLeft size={20} strokeWidth={1.75} /></button><button type="button" onClick={() => setActiveIndex((activeIndex + 1) % photos.length)} className="md:hidden absolute right-3 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white text-stone-800 p-2 transition-all duration-300 shadow-sm" style={{ borderRadius: '999px' }} aria-label="Next image"><ChevronRight size={20} strokeWidth={1.75} /></button><div className="md:hidden absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">{photos.map((_, i) => (<button key={i} type="button" onClick={() => setActiveIndex(i)} className="h-1 transition-all duration-300" style={{ width: i === activeIndex ? '20px' : '6px', background: i === activeIndex ? GOLD : 'rgba(255,255,255,0.7)', borderRadius: '999px' }} aria-label={`Go to slide ${i + 1}`} />))}</div></div></motion.div></div><Lightbox open={lightboxOpen} close={() => setLightboxOpen(false)} index={activeIndex} on={{ view: ({ index }) => setActiveIndex(index) }} slides={photos.map((p) => ({ src: p.url, alt: p.alt }))} /></div></section>);
+        return (
+          <section id="gallery" className="py-16 px-6 bg-onyx">
+            <div className="max-w-7xl mx-auto">
+              <div className="mb-12">
+                <div className="flex items-baseline gap-5 mb-5">
+                  <span className="font-display" style={{ fontSize: '0.875rem', color: GOLD, fontWeight: 400, letterSpacing: '0.05em' }}>
+                    — 03
+                  </span>
+                  <p className="uppercase text-white/45" style={{ fontSize: '0.65rem', letterSpacing: '0.32em', fontWeight: 400 }}>
+                    Onboard Experience
+                  </p>
+                </div>
+                <AnimatedHeadline
+                  className="font-display text-white"
+                  style={{ fontSize: 'clamp(2.4rem, 6vw, 4rem)', fontWeight: 400, lineHeight: 1.02, letterSpacing: '-0.02em' }}
+                  segments={[{ text: 'Lunch' }, { text: 'Included.', italic: true, color: GOLD }]}
+                />
+              </div>
+              <div className="rounded-3xl bg-white/5 p-10 text-white">
+                <p className="text-lg text-white/75">
+                  Enjoy a relaxed luxury lunch cruise with stunning Red Sea views.
+                </p>
+              </div>
+            </div>
+          </section>
+        );
       }
 
-      function Menu() {
+      function FoodMenu() {
         const tagLabel = { V: 'Vegetarian', VG: 'Vegan', GF: 'Gluten-Free', H: 'Halal' };
         const menu = [
           { course: 'Mezze & Appetizers', items: [{ name: 'Tahini & Baba Ganoush', tags: ['V', 'VG', 'GF'] }, { name: 'Oriental Salads', tags: ['V', 'VG', 'GF'] }, { name: 'Fresh Bakery Bread', tags: ['V'] }] },
@@ -332,7 +384,7 @@
       }
 
       function App() {
-        return (<BrowserRouter><Routes><Route path="/" element={<><ScrollProgress /><Navigation /><main><Hero /><TrustBand /><Services /><Boats /><Gallery /><Menu /><HowItWorks /><DepartureMarina /><Reviews /><FAQ /></main><Footer /><WhatsAppButton /></>} /></Routes></BrowserRouter>);
+        return (<BrowserRouter><Routes><Route path="/" element={<><ScrollProgress /><Navigation /><main><Hero /><TrustBand /><Services /><Boats /><Gallery /><FoodMenu /><HowItWorks /><DepartureMarina /><Reviews /><FAQ /></main><Footer /><WhatsAppButton /></>} /></Routes></BrowserRouter>);
       }
 
       const root = createRoot(document.getElementById('root'));
