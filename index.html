@@ -568,7 +568,7 @@
                   <div className="text-right pb-1"><p className="uppercase text-white/45" style={{ fontSize:'0.55rem', letterSpacing:'0.28em', fontWeight:400 }}>{dur==='full'?'Full Day':'Half Day'}</p><p className="text-white/45 mt-1" style={{ fontSize:'0.65rem', letterSpacing:'0.05em', fontWeight:300 }}>per boat &middot; {hours}</p></div>
                 </div>
                 <div className="grid grid-cols-2 mb-7" style={{ border:'1px solid rgba(8,145,178,0.35)', borderRadius:'2px', padding:'3px' }}>
-                  {['half','full'].map(function(d) {
+                  {(boat.name==='Manta' ? ['full'] : ['full','half']).map(function(d) {
                     var isA=dur===d;
                     return <button key={d} type="button" onClick={function(){setDur(d);}} className="relative py-2.5 uppercase transition-colors duration-500" style={{ fontSize:'0.6rem', letterSpacing:'0.28em', fontWeight:400, color:isA?'#0D0D0D':'rgba(255,255,255,0.55)', background:isA?'#C9842A':'transparent', borderRadius:'2px' }}>{d==='full'?'Full Day · 8h':'Half Day · 4h'}</button>;
                   })}
@@ -620,7 +620,6 @@
       function Gallery() {
         var photos = [
           { url:'lunch-1.jpeg', alt:'Luxury boat experience with fresh seafood buffet' },
-          { url:'lunch-2.jpeg', alt:'Delicious grilled fish and appetizers spread' },
           { url:'lunch-3.jpeg', alt:'Fresh fruit platter and gourmet dining experience' },
           { url:'boat-experience-5.jpg', alt:'Premium onboard meal service with fresh ingredients' },
         ];
