@@ -451,7 +451,7 @@
                               </ul>
                             </div>
                           )}
-                          <a href="#boats" onClick={function(e){e.preventDefault();var el=document.getElementById('boats');if(el)el.scrollIntoView({behavior:'smooth'});}} className="group/cta mt-8 flex items-center justify-center gap-2 w-full bg-[#C9842A] text-white hover:bg-white hover:text-onyx uppercase py-4 transition-all duration-500" style={{ fontSize:'0.7rem', letterSpacing:'0.32em', fontWeight:500, borderRadius:'2px' }}>Choose My Boat<span className="transition-transform duration-300 group-hover/cta:translate-x-1">&rarr;</span></a>
+                          <a href={'https://wa.me/201112324252?text=Hi%20sea-kingdom%2C%20I%27d%20like%20to%20reserve%20'+encodeURIComponent(svc.title)+'.'} target="_blank" rel="noopener noreferrer" className="group/cta mt-8 flex items-center justify-center gap-2 w-full bg-[#C9842A] text-white hover:bg-white hover:text-onyx uppercase py-4 transition-all duration-500" style={{ fontSize:'0.7rem', letterSpacing:'0.32em', fontWeight:500, borderRadius:'2px' }}>Reserve This Trip<span className="transition-transform duration-300 group-hover/cta:translate-x-1">&rarr;</span></a>
                         </div>
                       </article>
                     );
@@ -467,7 +467,7 @@
           { name:'sons', capacity:10, length:'14 m', priceFull:280, priceHalf:180, images:['bb.jpeg','sons-3.jpeg','sons-4.jpeg','sons-2.jpeg','780.jpeg','sons-5.jpeg','sons-7.jpeg','sons-8.jpeg','sons-9.jpeg','sons-10.jpeg'] },
           { name:'Manta', capacity:15, length:'21 m', priceFull:380, priceHalf:220, images:['manta-1.jpeg','manta-2.jpeg','manta-3.jpeg','manta-4.jpeg','manta-5.jpeg','manta-6.jpeg','manta-7.jpeg','manta-8.jpeg','manta-9.jpeg'] },
           { name:'Kaywa speed boat', capacity:9, length:'11 m', priceFull:250, priceHalf:120, images:['kaywa-1.jpeg','kaywa-2.jpeg','kaywa-3.jpeg','kaywa-4.jpeg','kaywa-5.jpeg','kaywa-6.jpeg','kaywa-7.jpeg','kaywa-8.jpeg'] },
-          { name:'Prince Momen', capacity:10, length:'14 m', priceFull:280, priceHalf:200, images:['prince-momen-1.jpeg','prince-momen-2.jpeg','prince-momen-3.jpeg','prince-momen-4.jpeg','prince-momen-5.jpeg'] },
+          { name:'Prince Momen', capacity:10, length:'14 m', priceFull:280, priceHalf:180, images:['prince-momen-1.jpeg','prince-momen-2.jpeg','prince-momen-3.jpeg','prince-momen-4.jpeg','prince-momen-5.jpeg'] },
         ];
         var INCLUSIONS = [{ label:'Hotel Transfer', sub:'Complimentary (inside Hurghada free; outside $20)' },{ label:'Private Crew', sub:'All-Inclusive' },{ label:'Snorkeling Gear', sub:'Premium' },{ label:'No Advance Payment', sub:'Pay on Arrival' }];
         var _sa = useState(null), activeBoat=_sa[0], setActiveBoat=_sa[1];
@@ -568,7 +568,7 @@
                   <div className="text-right pb-1"><p className="uppercase text-white/45" style={{ fontSize:'0.55rem', letterSpacing:'0.28em', fontWeight:400 }}>{dur==='full'?'Full Day':'Half Day'}</p><p className="text-white/45 mt-1" style={{ fontSize:'0.65rem', letterSpacing:'0.05em', fontWeight:300 }}>per boat &middot; {hours}</p></div>
                 </div>
                 <div className="grid grid-cols-2 mb-7" style={{ border:'1px solid rgba(8,145,178,0.35)', borderRadius:'2px', padding:'3px' }}>
-                  {['full','half'].map(function(d) {
+                  {['half','full'].map(function(d) {
                     var isA=dur===d;
                     return <button key={d} type="button" onClick={function(){setDur(d);}} className="relative py-2.5 uppercase transition-colors duration-500" style={{ fontSize:'0.6rem', letterSpacing:'0.28em', fontWeight:400, color:isA?'#0D0D0D':'rgba(255,255,255,0.55)', background:isA?'#C9842A':'transparent', borderRadius:'2px' }}>{d==='full'?'Full Day · 8h':'Half Day · 4h'}</button>;
                   })}
