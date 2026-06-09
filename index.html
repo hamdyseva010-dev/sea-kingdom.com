@@ -43,7 +43,7 @@
       "description": "Exclusive private yacht charters in Hurghada, Egypt. Dolphin trips, island hopping, snorkeling, and onboard dining. No deposit required.",
       "url": "https://sea-kingdom.com",
       "telephone": "+201112324252",
-      "email": "hello@sea-kingdom.com",
+      "email": "support@sea-kingdom.com",
       "image": "https://sea-kingdom.com/images/8879.jfif",
       "priceRange": "€€€",
       "address": {
@@ -361,7 +361,7 @@
         var _s1 = useState([]), services = _s1[0], setServices = _s1[1];
         var _s2 = useState(true), loading = _s2[0], setLoading = _s2[1];
         var FALLBACK = [
-          { id:1, title:'The Complete Red Sea Experience', description:'One unforgettable day. Search for dolphins in the open sea and hop between Hurghada\'s most exclusive islands — Orange Bay, Paradise Island, Hula Hula — all crafted exclusively around you.', price_from:'$680+', features:['Private luxury yacht & captain','Visit Egyptian Maldives Sandbank','Search for wild dolphins','Orange bay OR Paradise Hula Hula Island','Open buffet lunch onboard','Unlimited drinks – soft drinks, mineral water, snacks & fruit','2 Different snorkelling locations','Hotel transfers included'], addOns:[{ name:'Private Diving Session', price:'+$35' },{ name:'Parasailing', price:'+$20' }], image_url:'https://cdn.getyourguide.com/img/tour/d15c3dc5e3684c38da780b199574bd016c5d137686a88ec50adfbe52c96acf98.jpeg/148.jpg', images:['https://cdn.getyourguide.com/img/tour/d15c3dc5e3684c38da780b199574bd016c5d137686a88ec50adfbe52c96acf98.jpeg/148.jpg','dolphin-1.jpeg','dolphin-2.jpeg','dolphin-3.jpeg','https://res.klook.com/images/fl_lossy.progressive,q_65/c_fill,w_1295,h_863/w_80,x_15,y_15,g_south_west,l_Klook_water_br_trans_yhcmh3/activities/tagctchrrfractnbnofo/OrangeBayIslandSnorkelingTripWithWaterSports-Hurghada.jpg','island-1.jpg','island-2.jpg','island-3.jpg','island-4.jpg','island-5.webp','island-6.jpg','island-7.jpg','island-8.jpg','Bali-Dive-Safari.jpg','diving-1.jpeg','diving-2.jpeg','diving-4.jpeg','fishing-1.jpeg','fishing-2.jpeg','fishing-3.jpeg','fishing-4.jpeg','fishing-5.jpeg','fishing-6.jpeg','fishing-7.jpeg'] },
+          { id:1, title:'The Complete Red Sea Experience', description:'One unforgettable day. Search for dolphins in the open sea and hop between Hurghada\'s most exclusive islands — Orange Bay, Paradise Island, Hula Hula — all crafted exclusively around you.', price_from:'$680+', features:['Private luxury yacht & captain','Visit Egyptian Maldives Sandbank','Search for wild dolphins','Orange bay OR Paradise Hula Hula Island','Open buffet lunch onboard','Unlimited drinks – soft drinks, mineral water, snacks & fruit','2 Different snorkelling locations','Hotel transfers included'], addOns:[{ name:'Parasailing — first 3 guests free', price:'15€ per additional guest' }], image_url:'https://cdn.getyourguide.com/img/tour/d15c3dc5e3684c38da780b199574bd016c5d137686a88ec50adfbe52c96acf98.jpeg/148.jpg', images:['https://cdn.getyourguide.com/img/tour/d15c3dc5e3684c38da780b199574bd016c5d137686a88ec50adfbe52c96acf98.jpeg/148.jpg','dolphin-1.jpeg','dolphin-2.jpeg','dolphin-3.jpeg','https://res.klook.com/images/fl_lossy.progressive,q_65/c_fill,w_1295,h_863/w_80,x_15,y_15,g_south_west,l_Klook_water_br_trans_yhcmh3/activities/tagctchrrfractnbnofo/OrangeBayIslandSnorkelingTripWithWaterSports-Hurghada.jpg','island-1.jpg','island-2.jpg','island-3.jpg','island-4.jpg','island-5.webp','island-6.jpg','island-7.jpg','island-8.jpg','Bali-Dive-Safari.jpg','fishing-1.jpeg','fishing-2.jpeg','fishing-3.jpeg','fishing-4.jpeg','fishing-5.jpeg','fishing-6.jpeg','fishing-7.jpeg'] },
           { id:3, title:'Desert and Water Horseback Riding', description:'Experience the timeless magic of the Red Sea desert on horseback. Ride across golden dunes at sunset, discovering hidden Bedouin camps and pristine landscapes with an expert guide.', price_from:'$30+', features:['2 Hours — $30 per person','4 Hours — $50 per person','Professional horseback riding guide','Premium saddle & safety equipment','Sunset desert and water tours','Snacks included — light refreshments','Soft drinks & mineral water included'], image_url:'horse-1.jpeg', images:['horse-1.jpeg','horse-2.jpeg','horse-3.jpeg','horse-4.jpeg','horse-5.jpeg'] },
         ];
         var DURATIONS = ['Full day','Half or full day'];
@@ -395,9 +395,15 @@
               <span className="absolute top-5 right-8 uppercase text-white/70" style={{ fontSize:'0.55rem', letterSpacing:'0.32em', fontWeight:400 }}>{String(index+1).padStart(2,'0')} / {String(total).padStart(2,'0')}</span>
               <span className="absolute bottom-5 left-8 uppercase text-white/65" style={{ fontSize:'0.55rem', letterSpacing:'0.32em', fontWeight:400 }}>Private Experience</span>
               {list.length > 1 && (
-                <div className="absolute bottom-5 right-8 flex gap-1.5 pointer-events-none">
-                  {list.map(function(_,i) { return <span key={i} className="h-1 transition-all duration-500" style={{ width:i===active?'14px':'5px', background:i===active?GOLD:'rgba(255,255,255,0.4)', borderRadius:'999px' }} />; })}
-                </div>
+                <>
+                  <button type="button" onClick={function(e){e.stopPropagation();setActive(function(p){return (p-1+list.length)%list.length;});}} aria-label="Previous image" className="absolute left-4 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center w-10 h-10 rounded-full bg-black/40 text-white transition-colors duration-300 hover:bg-black/60" style={{ border:'1px solid rgba(255,255,255,0.18)' }}>&lsaquo;</button>
+                  <button type="button" onClick={function(e){e.stopPropagation();setActive(function(p){return (p+1)%list.length;});}} aria-label="Next image" className="absolute right-4 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center w-10 h-10 rounded-full bg-black/40 text-white transition-colors duration-300 hover:bg-black/60" style={{ border:'1px solid rgba(255,255,255,0.18)' }}>&rsaquo;</button>
+                  <div className="absolute bottom-5 right-8 flex gap-1.5 z-10">
+                    {list.map(function(_,i) { return (
+                      <button key={i} type="button" onClick={function(e){e.stopPropagation();setActive(i);}} aria-label={'Show image '+(i+1)} className="transition-all duration-300" style={{ width:i===active?'14px':'6px', height:'6px', background:i===active?GOLD:'rgba(255,255,255,0.4)', borderRadius:'999px', border:i===active?'1px solid rgba(255,255,255,0.9)':'1px solid transparent' }} />
+                    ); })}
+                  </div>
+                </>
               )}
             </div>
           );
@@ -451,7 +457,11 @@
                               </ul>
                             </div>
                           )}
-                          <a href={'https://wa.me/201112324252?text=Hi%20sea-kingdom%2C%20I%27d%20like%20to%20reserve%20'+encodeURIComponent(svc.title)+'.'} target="_blank" rel="noopener noreferrer" className="group/cta mt-8 flex items-center justify-center gap-2 w-full bg-[#C9842A] text-white hover:bg-white hover:text-onyx uppercase py-4 transition-all duration-500" style={{ fontSize:'0.7rem', letterSpacing:'0.32em', fontWeight:500, borderRadius:'2px' }}>Reserve This Trip<span className="transition-transform duration-300 group-hover/cta:translate-x-1">&rarr;</span></a>
+                          {svc.title === 'The Complete Red Sea Experience' ? (
+                            <a href="#boats" className="group/cta mt-8 flex items-center justify-center gap-2 w-full bg-[#C9842A] text-white hover:bg-white hover:text-onyx uppercase py-4 transition-all duration-500" style={{ fontSize:'0.7rem', letterSpacing:'0.32em', fontWeight:500, borderRadius:'2px' }}>Choose My Boat<span className="transition-transform duration-300 group-hover/cta:translate-x-1">&rarr;</span></a>
+                          ) : (
+                            <a href={'https://wa.me/201112324252?text=Hi%20sea-kingdom%2C%20I%27d%20like%20to%20reserve%20'+encodeURIComponent(svc.title)+'.'} target="_blank" rel="noopener noreferrer" className="group/cta mt-8 flex items-center justify-center gap-2 w-full bg-[#C9842A] text-white hover:bg-white hover:text-onyx uppercase py-4 transition-all duration-500" style={{ fontSize:'0.7rem', letterSpacing:'0.32em', fontWeight:500, borderRadius:'2px' }}>Reserve This Trip<span className="transition-transform duration-300 group-hover/cta:translate-x-1">&rarr;</span></a>
+                          )}
                         </div>
                       </article>
                     );
@@ -712,7 +722,7 @@
             <div className="max-w-7xl mx-auto">
               <div className="mb-9">
                 <div className="flex items-baseline gap-4 mb-3"><span className="font-display" style={{ fontSize:'0.8rem', color:GOLD, fontWeight:400, letterSpacing:'0.05em' }}>&mdash; 04</span><p className="uppercase text-white/45" style={{ fontSize:'0.6rem', letterSpacing:'0.32em', fontWeight:400 }}>Onboard Catering</p></div>
-                <AnimatedHeadline className="font-display text-white mb-4" style={{ fontSize:'clamp(1.8rem,4.5vw,2.75rem)', fontWeight:400, lineHeight:1.02, letterSpacing:'-0.02em' }} segments={[{ text:'The' },{ text:'Menu.', italic:true, color:GOLD }]} />
+                <AnimatedHeadline className="font-display text-white mb-4" style={{ fontSize:'clamp(1.8rem,4.5vw,2.75rem)', fontWeight:400, lineHeight:1.02, letterSpacing:'-0.02em' }} segments={[{ text:'The' },{ text:'Menu Lunch Included :', italic:true, color:GOLD }]} />
                 <p className="text-white/55 max-w-xl" style={{ fontSize:'0.85rem', lineHeight:1.65, fontWeight:300 }}>Freshly prepared on board by our private chef. Every dish crafted around your dietary preferences and the day&rsquo;s freshest catch.</p>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px" style={{ background:'rgba(8,145,178,0.25)', border:'1px solid rgba(8,145,178,0.3)' }}>
@@ -781,7 +791,7 @@
             <div className="max-w-7xl mx-auto">
               <div className="mb-14">
                 <div className="flex items-baseline gap-5 mb-5"><span className="font-display" style={{ fontSize:'0.875rem', color:GOLD, fontWeight:400, letterSpacing:'0.05em' }}>&mdash; 06</span><p className="uppercase text-white/45" style={{ fontSize:'0.65rem', letterSpacing:'0.32em', fontWeight:400 }}>Departure Point</p></div>
-                <AnimatedHeadline className="font-display text-white" style={{ fontSize:'clamp(2.4rem,6vw,4rem)', fontWeight:400, lineHeight:1.02, letterSpacing:'-0.02em' }} segments={[{ text:'Boarding from' },{ text:'Hurghada Marina.', italic:true, color:GOLD }]} />
+                <AnimatedHeadline className="font-display text-white" style={{ fontSize:'clamp(2.4rem,6vw,4rem)', fontWeight:400, lineHeight:1.02, letterSpacing:'-0.02em' }} segments={[{ text:'Boarding from' },{ text:'Hurghada old sheraton Marina', italic:true, color:GOLD }]} />
               </div>
               <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-6">
                 <div className="relative overflow-hidden" style={{ borderRadius:'8px', border:'1px solid rgba(8,145,178,0.3)', minHeight:'380px', background:'#0E2240' }}>
@@ -886,12 +896,12 @@
       }
 
       function Footer() {
-        var quickLinks = [['Our Fleet','#boats'],['Experiences','#services'],['Gallery','#gallery'],['Reviews','#reviews']];
+        var quickLinks = [['Our Fleet','#boats'],['Experiences','#services'],['Reviews','#reviews']];
         var socials = [{ Icon:Instagram, label:'Instagram', href:'https://instagram.com' },{ Icon:Facebook, label:'Facebook', href:'https://facebook.com' }];
         var contactItems = [
           { Icon:MapPin, content:'Hurghada, Red Sea Governorate, Egypt', href:null },
           { Icon:Phone, content:'+20 11 12324252', href:'tel:+201112324252' },
-          { Icon:Mail, content:'hello@sea-kingdom.com', href:'mailto:hello@sea-kingdom.com' },
+          { Icon:Mail, content:'support@sea-kingdom.com', href:'mailto:support@sea-kingdom.com' },
         ];
         return (
           <footer className="text-white pt-20 pb-10 px-6" style={{ background:'#050D1A', borderTop:'1px solid rgba(8,145,178,0.3)' }}>
@@ -978,7 +988,6 @@
               <TrustBand />
               <Services />
               <Boats />
-              <Gallery />
               <MenuSection />
               <HowItWorks />
               <DepartureMarina />
